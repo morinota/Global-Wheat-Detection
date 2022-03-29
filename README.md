@@ -1,2 +1,3 @@
 # Global-Wheat-Detection
-Global Wheat Detectionyou 
+Global Wheat Detectionコンペ用のPythonスクリプト。
+物体検出を試してみたくて。
