@@ -1,9 +1,10 @@
+from matplotlib.pyplot import box
 import torch
 import pandas as pd
-import cv2
-from cv2 import imread
+from PIL import Image
 from torch.utils.data import Dataset
 import numpy as np
+import os
 
 
 class MyDataset(Dataset):
@@ -13,7 +14,7 @@ class MyDataset(Dataset):
         Dataset (Dataset): torch.utils.data.Dataset
     '''
 
-    def __init__(self, dataframe: pd.DataFrame, image_dir: str, transforms:= None) -> None:
+    def __init__(self, dataframe: pd.DataFrame, image_dir: str, transforms=None) -> None:
         """
         Args:
             dataframe (pd.DataFrame): 画像idとbbox座標が格納されたdf
@@ -52,14 +53,54 @@ class MyDataset(Dataset):
         records = self.df[mask]  # ->df.DataFrame
 
         # 入力側の画像データを読み込み
-        image = cv2.imread(
-            f'{self.image_dir}/{image_id}.jpg', cv2.IMREAD_COLOR)
-        # 変換
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.float32)
-        # 正規化
-        image /= 255.0
+        path = os.path.join(self.image_dir, f'{image_id}.jpg')
+        image = Image.open(path)
 
-        return super().__getitem__(index)
+        # bbox座標の形式変換(DataFrameからndarrayへ)
+        # -> (画像内の小麦の数, 4)のndarray
+        boxes: np.ndarray
+        boxes = records[['x', 'y', 'w', 'h']].values
+        # ->各列が(x, y, x+w, y+h)のndarrayへ。
+        boxes[:, 2] = boxes[:, 0] + boxes[:, 2]  # wをx+wへ変換
+        boxes[:, 3] = boxes[:, 1] + boxes[:, 3]  # hをy+hへ変換
+
+        # bboxのエリアを計算(縦×横)(精度評価指標の計算で用いる)
+        area = (boxes[:, 3] - boxes[:, 1]) * (boxes[:, 2] - boxes[:, 0])
+        # areaをndarrayからTensorオブジェクトへ変換?
+        area = torch.as_tensor(area, dtype=torch.float32)
+
+        # クラスラベルの指定(今回は1クラスのみ)
+        labels = torch.ones((records.shape[0],), dtype=torch.int64)
+
+        # suppose all instances are not crowd
+        iscrowd = torch.zeros((records.shape[0],), dtype=torch.int64)
+
+        # 返り値用に、生成した変数をdictにまとめる。
+        target = {}
+        target['boxes'] = boxes
+        target['labels'] = labels
+        # target['masks'] = None
+        target['image_id'] = torch.tensor([index])
+        target['area'] = area
+        target['iscrowd'] = iscrowd
+
+        # 前処理を定義していれば...
+        if self.transforms:
+            # 前処理を行う
+            sample = {
+                'image': image,
+                'bboxes': target['boxes']
+                'labels': labels,
+            }
+            sample = self.transforms(**sample)
+            image = sample['image']
+
+            # 前処理に合わせて、bboxの値を修正してる?
+            target['boxes'] = torch.stack(
+                tuple(map(torch.tensor, zip(*sample['bboxes'])))).permute(1, 0)
+
+
+        return image, target, image_id
 
     def __len__(self) -> int:
         """データセットのサイズを取得する
@@ -67,11 +108,10 @@ class MyDataset(Dataset):
         Returns:
             int: データセットのサイズ
         """
-        return super().__len__()
+        return self.image_ids.shape[0]
 
 
 def main():
-    print(cv2.__version__)
     pass
 
 
