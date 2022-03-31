@@ -30,7 +30,7 @@ class MyDataset(Dataset):
         self.transforms = transforms
 
     def __getitem__(self, index: int):
-        """インデックスからデータを取得する
+        """インデックスを渡されてデータを返す
         Args:
             index (int): 取得するデータのインデックス
         Returns:
@@ -113,7 +113,3 @@ class MyDataset(Dataset):
         return self.image_ids.shape[0]
 
 
-
-
-if __name__ == '__main__':
-    main()
