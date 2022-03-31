@@ -1,11 +1,10 @@
 from matplotlib.pyplot import box
 import torch
 import pandas as pd
-from PIL import Image
 from torch.utils.data import Dataset
 import numpy as np
 import os
-
+import cv2
 
 class MyDataset(Dataset):
     '''
@@ -54,12 +53,16 @@ class MyDataset(Dataset):
 
         # 入力側の画像データを読み込み
         path = os.path.join(self.image_dir, f'{image_id}.jpg')
-        image = Image.open(path)
+        image = cv2.imread(filename=path, flags=cv2.IMREAD_COLOR)
+        # BGRからRGBに配列の順序を変換?
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.float32)
+        # 正規化?
+        image /= 255.0
 
         # bbox座標の形式変換(DataFrameからndarrayへ)
         # -> (画像内の小麦の数, 4)のndarray
-        boxes: np.ndarray
         boxes = records[['x', 'y', 'w', 'h']].values
+        boxes: np.ndarray
         # ->各列が(x, y, x+w, y+h)のndarrayへ。
         boxes[:, 2] = boxes[:, 0] + boxes[:, 2]  # wをx+wへ変換
         boxes[:, 3] = boxes[:, 1] + boxes[:, 3]  # hをy+hへ変換
@@ -89,8 +92,8 @@ class MyDataset(Dataset):
             # 前処理を行う
             sample = {
                 'image': image,
-                'bboxes': target['boxes']
-                'labels': labels,
+                'bboxes': target['boxes'],
+                'labels': target['labels'],
             }
             sample = self.transforms(**sample)
             image = sample['image']
@@ -98,7 +101,6 @@ class MyDataset(Dataset):
             # 前処理に合わせて、bboxの値を修正してる?
             target['boxes'] = torch.stack(
                 tuple(map(torch.tensor, zip(*sample['bboxes'])))).permute(1, 0)
-
 
         return image, target, image_id
 
@@ -111,8 +113,6 @@ class MyDataset(Dataset):
         return self.image_ids.shape[0]
 
 
-def main():
-    pass
 
 
 if __name__ == '__main__':
