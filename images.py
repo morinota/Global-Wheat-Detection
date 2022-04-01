@@ -34,7 +34,7 @@ def visualize_image_and_bboxes(images: List[torch.Tensor], targets: List[Dict[st
     ax.imshow(image)
 
     plt.savefig(os.path.join(INPUT_DIR, f'image_and_bboxes_{i}.jpg'),
-                tight_layout=True, 
+                tight_layout=True,
                 dpi=64,
                 facecolor="lightgray",)
     del fig, ax
