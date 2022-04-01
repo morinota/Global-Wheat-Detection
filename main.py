@@ -8,6 +8,7 @@ from data import load_data
 from transforms import get_train_transform, get_valid_transform
 from preprocessing import my_preprocessing
 
+from images import visualize_image_and_bboxes
 
 def main():
     # KaggleAPIからデータロード
@@ -78,7 +79,9 @@ def main():
     images = list(image.to(device) for image in images)
     targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
 
-    print(type(images))
+    # 試しに一枚可視化してみる
+    visualize_image_and_bboxes(images, targets, i=2)
+
 
 
 if __name__ == '__main__':
