@@ -73,7 +73,7 @@ def main():
     print(len(targets))
     print(type(images))
     # (実行する度に、リターンされるデータセットが変わる?)
-
+    print("ここまで終了!")
     # データ型を変更してる?to(device)ってなんだ?
     images = list(image.to(device) for image in images)
     targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
