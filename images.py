@@ -4,8 +4,10 @@ from typing import List, Dict
 import numpy as np
 import torch
 import cv2
+import os
 
 from torch import Tensor
+INPUT_DIR = 'input'
 
 
 def visualize_image_and_bboxes(images: List[torch.Tensor], targets: List[Dict[str, torch.Tensor]], i: int) -> None:
@@ -31,4 +33,8 @@ def visualize_image_and_bboxes(images: List[torch.Tensor], targets: List[Dict[st
     ax.set_axis_off()
     ax.imshow(image)
 
+    plt.savefig(os.path.join(INPUT_DIR, f'image_and_bboxes_{i}.jpg'),
+                tight_layout=True, 
+                dpi=64,
+                facecolor="lightgray",)
     del fig, ax
