@@ -42,4 +42,8 @@ def show(test_dataloader: DataLoader, model: FasterRCNN, image_i: int = 0):
     # modelに画像のTensorを渡せば推論を実行する(返値もTensor)
     outputs = model(sample_image) # ->()
 
-    
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
