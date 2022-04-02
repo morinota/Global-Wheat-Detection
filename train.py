@@ -41,7 +41,7 @@ def train_model(model: FasterRCNN, train_dataloader: DataLoader):
     # 更新すべきパラメータと最適化手法の指定
     params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.SGD(params=params,
-                                lr=0.05,
+                                lr=0.005,
                                 momentum=0.9,
                                 weight_decay=0.0005
                                 )
