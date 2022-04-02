@@ -51,15 +51,10 @@ def train_model(model: FasterRCNN, train_dataloader: DataLoader):
     # GPUのキャッシュクリア
     torch.cuda.empty_cache()
 
-    # 誤差関数の設定?
-    loss_hist = Averager()
-
     # 学習モードに移行
     model.train()
     # 学習
     for epoch in range(num_epochs):
-        # 誤差関数の値をリセット?
-        loss_hist.reset()
 
         for i, batch in enumerate(train_dataloader):
 
@@ -74,18 +69,17 @@ def train_model(model: FasterRCNN, train_dataloader: DataLoader):
                        for t in targets]
 
             # 誤差関数の値を取得?
-            # 学習モードでは画像とターゲット(ground-truch)を入力する
+            # 学習モードでは画像とターゲット(ground-truch=正解値)を入力する
             # 返値はDict[str, Tensor]でlossが入ってる。(RPNとRCNN両方のloss)
             loss_dict = model(images, targets)
-
+            print(loss_dict)
+            # RPNとRCNN両方のlossを足し合わせてる?
             losses = sum(loss for loss in loss_dict.values())
             loss_value = losses.item()
 
-            loss_hist.send(loss_value)
-
-            optimizer.zero_grad()
-            losses.backward()
-            optimizer.step()
+            optimizer.zero_grad() # 前のバッチで計算されたgradをリセット
+            losses.backward() # 誤差逆伝搬で、各パラメータの勾配gradの値を計算(実は累算してる!だからzero_gradを使ってる)
+            optimizer.step() # - grad＊学習率を使って、パラメータを更新
 
             # 50の倍数のiterationの時、その時のlossの値を出力.
             if (i+1) % 50 == 0:
@@ -95,5 +89,10 @@ def train_model(model: FasterRCNN, train_dataloader: DataLoader):
         if lr_scheduler is not None:
             lr_scheduler.step()
 
-        # 一エポックが終わる毎に誤差関数の変化を出力?
-        print(f"Epoch #{epoch+1} loss: {loss_hist.value}")
+    # 保存
+    model_path = 'model.pth'
+    # model.state_dict()として保存した方が無駄な情報を削れてファイルサイズを小さくできるらしい.
+    torch.save(model.state_dict(), model_path)
+
+    # 返値としても出力
+    return model
