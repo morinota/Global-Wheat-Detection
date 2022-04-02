@@ -43,7 +43,7 @@ def main():
     # 学習用のDataloaderの作成
     train_dataloader = DataLoader(
         dataset=train_dataset,
-        batch_size=64,  # ミニバッチの個数
+        batch_size=2,  # ミニバッチの個数
         shuffle=False,  # ミニバッチをDatasetからランダムに取り出すかどうか
         drop_last=True,  # 残りのデータ数がバッチサイズより少ない場合、使わないかどうか
         num_workers=2,  # 複数処理をするかどうか,
@@ -54,7 +54,7 @@ def main():
     # 検証用のDataLoaderの作成
     valid_dataloader = DataLoader(
         dataset=valid_dataset,
-        batch_size=64,
+        batch_size=1,
         shuffle=False,
         num_workers=2,
         collate_fn=collate_fn,
