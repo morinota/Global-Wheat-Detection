@@ -7,8 +7,9 @@ import pandas as pd
 from data import load_data
 from transforms import get_train_transform, get_valid_transform
 from preprocessing import my_preprocessing
-
+from model import create_model
 from images import visualize_image_and_bboxes
+from train import train_model
 
 def main():
     # KaggleAPIからデータロード
@@ -59,28 +60,23 @@ def main():
         collate_fn=collate_fn,
         drop_last=False,)
 
-    # GPU使うかどうか
-    if torch.cuda.is_available():
-        device = torch.device('cuda')
-        print(device)
-    else:
-        device = torch.device('cpu')
-        print(device)
+    # 使用可能なデバイスを指定。
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+
 
     # OpenCVで描画
     # DataLoaderからデータセットを取得
     images, targets, image_ids = next(iter(train_dataloader))
-    print(len(images))  # ->trainデータ2708枚の内、batch_size枚がリターン.
-    print(len(targets))
-    print(type(images))
-    # (実行する度に、リターンされるデータセットが変わる?)
-    print("ここまで終了!")
-    # データ型を変更してる?to(device)ってなんだ?
     images = list(image.to(device) for image in images)
     targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
-
     # 試しに一枚可視化してみる
     visualize_image_and_bboxes(images, targets, i=2)
+
+    # モデルを構築
+    model = create_model()
+    # 学習
+    train_model(model=model, train_dataloader=train_dataloader)
+
 
 
 
