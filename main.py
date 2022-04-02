@@ -70,7 +70,7 @@ def main():
     images = list(image.to(device) for image in images)
     targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
     # 試しに一枚可視化してみる
-    visualize_image_and_bboxes(images, targets, i=2)
+    visualize_image_and_bboxes(images, targets, i=0)
 
     # モデルを構築
     model = create_model()
