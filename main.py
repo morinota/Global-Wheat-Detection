@@ -43,7 +43,7 @@ def main():
     # 学習用のDataloaderの作成
     train_dataloader = DataLoader(
         dataset=train_dataset,
-        batch_size=2,  # ミニバッチの個数
+        batch_size=10,  # ミニバッチの個数(小さい方がメモリ節約できる)
         shuffle=False,  # ミニバッチをDatasetからランダムに取り出すかどうか
         drop_last=True,  # 残りのデータ数がバッチサイズより少ない場合、使わないかどうか
         num_workers=2,  # 複数処理をするかどうか,
