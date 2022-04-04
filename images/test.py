@@ -11,7 +11,7 @@ import cv2
 import os
 
 
-def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_observed :ndarray, png_name: str):
+def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_observed: ndarray, png_name: str):
     '''
     画像pixel(ndarray)と、bboxの座標群を渡して、それらをpngとして描画出力する関数
     '''
@@ -29,11 +29,11 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_o
 
     for bbox in bboxes_observed:
         cv2.rectangle(img=image,
-                        pt1=(bbox[0], bbox[1]),
-                        pt2=(bbox[2], bbox[3]),
-                        color=(0, 0, 220),
-                        thickness=3,
-                        )
+                      pt1=(bbox[0], bbox[1]),
+                      pt2=(bbox[2], bbox[3]),
+                      color=(0, 0, 220),
+                      thickness=3,
+                      )
 
     ax.set_axis_off()
     ax.imshow(image)
@@ -78,10 +78,12 @@ def show_images_bbox_predicted(test_dataloader: DataLoader, model: FasterRCNN, i
     # Tensorをデバイスに渡す
     outputs = [{k: v.to(cpu_device) for k, v in t.items()} for t in outputs]
     # 指定の画像のbboxesの推定値を取得+ndarrayに格納
-    outputs_bboxes = outputs[image_i]['boxes'].cpu().detach().numpy().astype(np.int32)
+    outputs_bboxes = outputs[image_i]['boxes'].cpu(
+    ).detach().numpy().astype(np.int32)
 
     # 描画＋png出力
     file_name = f'image_bboxes_predict_{image_i}'
     _draw_bboxes_on_image(image=sample_image,
-                          bboxes=outputs_bboxes,
+                          bboxes_predicted == outputs_bboxes,
+                          bboxes_observed=boxes,
                           png_name=file_name)
