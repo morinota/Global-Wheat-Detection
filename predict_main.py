@@ -5,11 +5,14 @@ import torch
 import os
 import pandas as pd
 from load_data.data import load_data
-from transforms import get_train_transform, get_valid_transform
+from dataset.transforms import get_train_transform, get_valid_transform
 from load_data.preprocessing import my_preprocessing
-from model import create_model
-from images import visualize_image_and_bboxes
-from train import train_model
+from scipy.__config__ import show
+from train.model import create_model
+from images.images import visualize_image_and_bboxes
+from train.train import train_model
+from images.test import show_images_bbox_predicted
+
 
 def main():
     # KaggleAPIからデータロード
@@ -61,25 +64,19 @@ def main():
         drop_last=False,)
 
     # 使用可能なデバイスを指定。
-    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+    device = torch.device(
+        'cuda') if torch.cuda.is_available() else torch.device('cpu')
 
-
-    # OpenCVで描画
-    # DataLoaderからデータセットを取得
-    images, targets, image_ids = next(iter(train_dataloader))
-    images = list(image.to(device) for image in images)
-    targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
-    # 試しに一枚可視化してみる
-    visualize_image_and_bboxes(images, targets, i=0)
-
-    # モデルを構築
+    # モデルを構築(定義しなおし)
     model = create_model()
-    # 学習
-    model = train_model(model=model, train_dataloader=train_dataloader)
+    # 学習済みのパラメータを読み込み
+    model_path = 'model.pth'
+    model.load_state_dict(torch.load(model_path))
 
-    # 予測値の画像出力
-
-
+    # 予測値bboxの画像出力
+    show_images_bbox_predicted(test_dataloader=valid_dataloader,
+                               model=model,
+                               image_i=0)
 
 
 if __name__ == '__main__':

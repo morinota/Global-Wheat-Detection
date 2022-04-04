@@ -3,7 +3,7 @@ from torchvision.models.detection.faster_rcnn import FasterRCNN
 import torch
 from torch.utils.data import DataLoader
 from typing import List, Dict
-
+from tqdm import tqdm
 
 class Averager:
     def __init__(self):
@@ -56,7 +56,7 @@ def train_model(model: FasterRCNN, train_dataloader: DataLoader):
     # 学習
     for epoch in range(num_epochs):
 
-        for i, batch in enumerate(train_dataloader):
+        for i, batch in enumerate(tqdm(train_dataloader)):
 
             # batchにはそのミニバッチのimages, targets, image_idsが入ってる。
             images: List[Tensor]
@@ -72,7 +72,7 @@ def train_model(model: FasterRCNN, train_dataloader: DataLoader):
             # 学習モードでは画像とターゲット(ground-truch=正解値)を入力する
             # 返値はDict[str, Tensor]でlossが入ってる。(RPNとRCNN両方のloss)
             loss_dict = model(images, targets)
-            print(loss_dict)
+
             # RPNとRCNN両方のlossを足し合わせてる?
             losses = sum(loss for loss in loss_dict.values())
             loss_value = losses.item()
