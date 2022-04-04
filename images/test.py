@@ -84,6 +84,6 @@ def show_images_bbox_predicted(test_dataloader: DataLoader, model: FasterRCNN, i
     # 描画＋png出力
     file_name = f'image_bboxes_predict_{image_i}'
     _draw_bboxes_on_image(image=sample_image,
-                          bboxes_predicted == outputs_bboxes,
+                          bboxes_predicted = outputs_bboxes,
                           bboxes_observed=boxes,
                           png_name=file_name)
