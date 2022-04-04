@@ -1,4 +1,3 @@
-from email.mime import image
 from typing import Dict, List
 from torch.utils.data import DataLoader
 import torch
@@ -71,7 +70,7 @@ def show_images_bbox_predicted(test_dataloader: DataLoader, model: FasterRCNN, i
     # Tensorをデバイスに渡す
     outputs = [{k: v.to(cpu_device) for k, v in t.items()} for t in outputs]
     # 指定の画像のbboxesの推定値を取得+ndarrayに格納
-    outputs_bboxes = outputs[image_i]['boxes'].cpu().numpy().astype(np.int32)
+    outputs_bboxes = outputs[image_i]['boxes'].cpu().detach().numpy().astype(np.int32)
 
     # 描画＋png出力
     file_name = f'image_bboxes_predict_{image_i}'
