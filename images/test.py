@@ -6,11 +6,8 @@ from torch import Tensor
 import numpy as np
 from numpy import ndarray
 from images.images import INPUT_DIR
-from isort import file
 from torchvision.models.detection.faster_rcnn import FasterRCNN
 import matplotlib.pyplot as plt
-from PIL import ImageDraw, ImageFont
-from PIL import Image
 import cv2
 import os
 
