@@ -8,7 +8,7 @@ from torchvision.models.detection.faster_rcnn import FasterRCNN
 
 def show(test_dataloader: DataLoader, model: FasterRCNN, image_i: int = 0):
     '''
-    推論結果をチェックする関数
+    推論結果を画像+bbox(推論結果)としてpng出力する関数
     '''
     import matplotlib.pyplot as plt
     from PIL import ImageDraw, ImageFont

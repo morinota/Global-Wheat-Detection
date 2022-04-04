@@ -1,15 +1,16 @@
 from torch.utils.data import DataLoader
-from dataset.dataset import MyDataset
+from dataset.my_dataset import MyDataset
 import torch
-from torchvision import transforms
+
 import os
 import pandas as pd
-from data import load_data
-from transforms import get_train_transform, get_valid_transform
-from preprocessing import my_preprocessing
-from model import create_model
-from images import visualize_image_and_bboxes
-from train import train_model
+from load_data.data import load_data
+from dataset.transforms import get_train_transform, get_valid_transform
+from load_data.preprocessing import my_preprocessing
+from train.model import create_model
+from images.images import visualize_image_and_bboxes
+from train.train import train_model
+
 
 def main():
     # KaggleAPIからデータロード
@@ -61,8 +62,8 @@ def main():
         drop_last=False,)
 
     # 使用可能なデバイスを指定。
-    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-
+    device = torch.device(
+        'cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     # OpenCVで描画
     # DataLoaderからデータセットを取得
@@ -75,9 +76,9 @@ def main():
     # モデルを構築
     model = create_model()
     # 学習
-    train_model(model=model, train_dataloader=train_dataloader)
+    model = train_model(model=model, train_dataloader=train_dataloader)
 
-
+    # 予測値の画像出力
 
 
 if __name__ == '__main__':
