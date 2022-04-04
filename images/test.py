@@ -11,7 +11,7 @@ import cv2
 import os
 
 
-def _draw_bboxes_on_image(image: np.ndarray, bboxes: ndarray, png_name: str):
+def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_observed :ndarray, png_name: str):
     '''
     画像pixel(ndarray)と、bboxの座標群を渡して、それらをpngとして描画出力する関数
     '''
@@ -19,13 +19,21 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes: ndarray, png_name: str):
     fig, ax = plt.subplots(1, 1, figsize=(16, 8))
 
     # 画像にbboxを1つずつ描画
-    for bbox in bboxes:
+    for bbox in bboxes_predicted:
         cv2.rectangle(img=image,
                       pt1=(bbox[0], bbox[1]),
                       pt2=(bbox[2], bbox[3]),
                       color=(220, 0, 0),
                       thickness=3
                       )
+
+    for bbox in bboxes_observed:
+        cv2.rectangle(img=image,
+                        pt1=(bbox[0], bbox[1]),
+                        pt2=(bbox[2], bbox[3]),
+                        color=(0, 0, 220),
+                        thickness=3,
+                        )
 
     ax.set_axis_off()
     ax.imshow(image)
