@@ -37,7 +37,7 @@ def predict_object_detection(test_dataloader: DataLoader, model: FasterRCNN):
     detection_threshold = 0.5
     results = []
 
-    for images, _, image_ids in test_dataloader:
+    for images, image_ids in test_dataloader:
         # input側のデータを取得.
         images: List[Tensor]
         # デバイスにTensorを渡す処理
