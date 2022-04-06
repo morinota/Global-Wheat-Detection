@@ -1,6 +1,6 @@
 from unittest import result
 from torch.utils.data import DataLoader
-from dataset.my_dataset import MyDataset
+from dataset.my_dataset import MyDataset, MyDataset_for_predict
 import torch
 
 import os
@@ -28,7 +28,7 @@ def main():
     # 提出用のcsvファイルを読み込み
     test_df = pd.read_csv(os.path.join(INPUT_DIR, 'sample_submission.csv'))
 
-    test_dataset = MyDataset(dataframe=test_df,
+    test_dataset = MyDataset_for_predict(dataframe=test_df,
                              image_dir=image_dir_test,
                              transforms=get_test_transform()
                              )

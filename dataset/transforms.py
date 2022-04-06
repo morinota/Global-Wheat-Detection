@@ -33,7 +33,7 @@ def get_valid_transform() -> alb.Compose:
 
 def get_test_transform() -> alb.Compose:
     transform_list = [
-        alb.Resize(512, 512),
+        # alb.Resize(512, 512),
         ToTensorV2(p=1.0)
     ]
     return alb.Compose(transforms=transform_list)
