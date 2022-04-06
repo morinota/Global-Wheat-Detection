@@ -73,7 +73,7 @@ def main():
     # 推論結果をDataFrameにまとめる
     test_df = pd.DataFrame(results, columns=['image_id', 'PredictionString'],)
     test_df.to_csv('submission.csv', index=False)
-
+    print(test_df.head())
     # 結果をkaggleAPIを通してSubmit
     submit(csv_filepath='submission.csv', message='first submission')
 
