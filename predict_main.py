@@ -19,7 +19,7 @@ from predict.submit import submit
 
 def main():
     # KaggleAPIからデータロード
-    load_data()
+    # load_data()
 
     INPUT_DIR = 'input'
     image_dir_train = os.path.join(INPUT_DIR, 'train')
