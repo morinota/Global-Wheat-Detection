@@ -72,7 +72,7 @@ def main():
     print(results) #->List[Dict[str, str]]
 
     # 推論結果をDataFrameにまとめる
-    test_df = pd.DataFrame(results, columns=['image_id', 'PredictionString'],)
+    test_df = pd.DataFrame(results)
     test_df.to_csv('submission.csv', index=False)
     print(test_df.head())
     print(len(test_df))

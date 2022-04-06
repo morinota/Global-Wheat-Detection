@@ -83,7 +83,7 @@ def predict_object_detection(test_dataloader: DataLoader, model: FasterRCNN):
 
             result = {
                 'image_id': image_id,
-                'PredictiongString': format_prediction_string(boxes=boxes,
+                'PredictionString': format_prediction_string(boxes=boxes,
                                                               scores=scores)
             }
             results.append(result)
