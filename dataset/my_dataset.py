@@ -131,7 +131,8 @@ class MyDataset_for_predict(Dataset):
         image_id = self.image_ids[index]
         records = self.df[self.df['image_id'] == image_id]
 
-        image = cv2.imread(f'{self.image_dir}/{image_id}.jpg', cv2.IMREAD_COLOR)
+        image = cv2.imread(
+            f'{self.image_dir}/{image_id}.jpg', cv2.IMREAD_COLOR)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.float32)
         image /= 255.0
 
