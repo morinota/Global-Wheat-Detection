@@ -13,20 +13,27 @@ import matplotlib.pyplot as plt
 import cv2
 import os
 
-from zmq import device
 
 
 def format_prediction_string(boxes, scores):
-    '''bboxの座標とスコアを受け取って、"score x y w h"(提出の様式)に変換する関数'''
-
+    '''
+    ある1つの画像に対する、bboxの座標とスコアを受け取って、
+    "score x y w h"(提出の様式)に変換する関数
+    '''
+    # 結果格納用のリストを用意
     pred_strings = []
+
+    # bbox1つ1つに対して処理を実行
     for j in zip(scores, boxes):
+        # "score x y w h"のstringを作って、リストに追加.
         pred_strings.append(
-            # "score x y w h"のstringを作ってる。
             f"{j[0]:.4f} {j[1][0]} {j[1][1]} {j[1][2]} {j[1][3]}"
             )
 
-    return " ".join(pred_strings)
+    # str.join()で、リストの要素をstrで連結し、1つのstrへ変換
+    str_pred_strings = " ".join(pred_strings)
+    # -> "score1 x1 y1 w1 h1 score2 x2 y2 w2 h2 score3 x3 y3 w3 h3..."
+    return str_pred_strings
 
 
 def predict_object_detection(test_dataloader: DataLoader, model: FasterRCNN):
@@ -79,9 +86,9 @@ def predict_object_detection(test_dataloader: DataLoader, model: FasterRCNN):
                 'PredictiongString': format_prediction_string(boxes=boxes,
                                                               scores=scores)
             }
-            print(result)
             results.append(result)
 
     # 最終的に各画像の(id, 物体検出結果(bboxes, scores))が格納されたリストがretun
     results: List[Dict[str, str]]
+    print(results)
     return results
