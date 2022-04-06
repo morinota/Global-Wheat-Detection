@@ -4,7 +4,7 @@ import torch
 
 
 def create_model() -> FasterRCNN:
-    # 学習済みモデルを読み込み
+    # 学習済みモデルを読み込み(転移学習)
     model: FasterRCNN
     model = torchvision.models.detection.fasterrcnn_resnet50_fpn(
         pretrained=True)

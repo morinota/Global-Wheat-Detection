@@ -6,6 +6,7 @@ import numpy as np
 import os
 import cv2
 
+
 class MyDataset(Dataset):
     '''
     物体検出用データセット。
@@ -13,7 +14,9 @@ class MyDataset(Dataset):
         Dataset (Dataset): torch.utils.data.Dataset
     '''
 
-    def __init__(self, dataframe: pd.DataFrame, image_dir: str, transforms=None) -> None:
+    def __init__(self, dataframe: pd.DataFrame,
+                 image_dir: str,
+                 transforms=None) -> None:
         """
         Args:
             dataframe (pd.DataFrame): 画像idとbbox座標が格納されたdf
@@ -111,5 +114,3 @@ class MyDataset(Dataset):
             int: データセットのサイズ
         """
         return self.image_ids.shape[0]
-
-
