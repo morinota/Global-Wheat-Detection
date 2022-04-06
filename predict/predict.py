@@ -49,7 +49,7 @@ def predict_object_detection(test_dataloader: DataLoader, model: FasterRCNN):
         # modelを推論モードへ
         model.eval()
         # 推論(outputを取得)
-        outputs = model(input=images)
+        outputs = model(images)
         outputs: List[Dict[str, Tensor]]
 
         # 1バッチ内の各画像の物体検出結果をまとめる
