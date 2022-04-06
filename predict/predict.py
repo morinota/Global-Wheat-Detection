@@ -17,10 +17,14 @@ from zmq import device
 
 
 def format_prediction_string(boxes, scores):
+    '''bboxの座標とスコアを受け取って、"score x y w h"(提出の様式)に変換する関数'''
+
     pred_strings = []
     for j in zip(scores, boxes):
         pred_strings.append(
-            f"{j[0]:.4f} {j[1][0]} {j[1][1]} {j[1][2]} {j[1][3]}")
+            # "score x y w h"のstringを作ってる。
+            f"{j[0]:.4f} {j[1][0]} {j[1][1]} {j[1][2]} {j[1][3]}"
+            )
 
     return " ".join(pred_strings)
 
@@ -75,7 +79,7 @@ def predict_object_detection(test_dataloader: DataLoader, model: FasterRCNN):
                 'PredictiongString': format_prediction_string(boxes=boxes,
                                                               scores=scores)
             }
-
+            print(result)
             results.append(result)
 
     # 最終的に各画像の(id, 物体検出結果(bboxes, scores))が格納されたリストがretun

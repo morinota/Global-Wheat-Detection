@@ -61,9 +61,9 @@ def main():
     model.load_state_dict(torch.load(model_path))
 
     # 予測値bboxの画像出力
-    # show_images_bbox_predicted(test_dataloader=valid_dataloader,
-    #                            model=model,
-    #                            image_i=0)
+    show_images_bbox_predicted(test_dataloader=test_dataloader,
+                               model=model,
+                               image_i=0)
 
     # 推論
     results = predict_object_detection(test_dataloader=test_dataloader,
