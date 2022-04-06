@@ -78,6 +78,11 @@ def main():
     # 学習
     model = train_model(model=model, train_dataloader=train_dataloader)
 
+    # モデルのパラメータの保存
+    drive_dir = r'/content/drive/MyDrive/Colab Notebooks/kaggle/Global-Wheat-Detection'
+    model_path = os.path.join(drive_dir, 'model.pth')
+    torch.save(model.state_dict(), model_path)
+
     # 予測値の画像出力
 
 
