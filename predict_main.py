@@ -14,6 +14,7 @@ from images.images import visualize_image_and_bboxes
 from train.train import train_model
 from images.test import show_images_bbox_predicted
 from predict.predict import predict_object_detection
+from predict.submit import submit
 
 
 def main():
@@ -72,6 +73,9 @@ def main():
     # 推論結果をDataFrameにまとめる
     test_df = pd.DataFrame(results, columns=['image_id', 'PredictionString'],)
     test_df.to_csv('submission.csv', index=False)
+
+    # 結果をkaggleAPIを通してSubmit
+    submit(csv_filepath='submission.csv', message='first submission')
 
 if __name__ == '__main__':
     main()
