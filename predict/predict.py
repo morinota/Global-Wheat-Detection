@@ -45,7 +45,7 @@ def predict_object_detection(test_dataloader: DataLoader, model: FasterRCNN):
         'cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     # detection閾値の設定
-    detection_threshold = 0.5
+    detection_threshold = 0.7
     results = []
 
     for images, image_ids in test_dataloader:
@@ -90,5 +90,5 @@ def predict_object_detection(test_dataloader: DataLoader, model: FasterRCNN):
 
     # 最終的に各画像の(id, 物体検出結果(bboxes, scores))が格納されたリストがretun
     results: List[Dict[str, str]]
-    print(results)
+    
     return results

@@ -69,6 +69,7 @@ def main():
     results = predict_object_detection(test_dataloader=test_dataloader,
                                        model=model
                                        )
+    print(results) #->List[Dict[str, str]]
 
     # 推論結果をDataFrameにまとめる
     test_df = pd.DataFrame(results, columns=['image_id', 'PredictionString'],)
