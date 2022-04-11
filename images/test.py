@@ -55,7 +55,7 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_o
                 tight_layout=True,
                 dpi=64,
                 facecolor="lightgray",)
-    print(f'save the figure to {os.path.join(INPUT_DIR, f'{png_name}.png')}')
+    print(f'save the figure')
 
 
 def show_images_bbox_predicted(test_dataloader: DataLoader, model: FasterRCNN, image_i: int = 0):
