@@ -10,6 +10,7 @@ from load_data.preprocessing import my_preprocessing
 from train.model import create_model
 from images.images import visualize_image_and_bboxes
 from train.train import train_model
+from images.test import show_images_bbox_predicted
 
 
 def main():
@@ -83,7 +84,11 @@ def main():
     model_path = os.path.join(DRIVE_DIR, 'model.pth')
     torch.save(model.state_dict(), model_path)
 
-    # 予測値の画像出力
+    
+    # 検証用データに対して、予測値bboxの画像出力
+    show_images_bbox_predicted(test_dataloader=valid_dataloader,
+                               model=model,
+                               image_i=0)
 
 
 if __name__ == '__main__':
