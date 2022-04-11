@@ -15,6 +15,9 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_o
     '''
     画像pixel(ndarray)と、bboxの座標群を渡して、それらをpngとして描画出力する関数
     '''
+    # bboxの色の指定
+    colormap_dict = {'predicted':(255, 0, 40), 'actual':(91, 255, 0)}
+
     # Figureオブジェクト、Axesオブジェクトの生成
     fig, ax = plt.subplots(1, 1, figsize=(16, 8))
 
@@ -23,7 +26,7 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_o
         cv2.rectangle(img=image,
                       pt1=(bbox[0], bbox[1]),
                       pt2=(bbox[2], bbox[3]),
-                      color=(255, 0, 40), # 赤に近い色
+                      color=colormap_dict['predicted'], # 赤に近い色
                       thickness=3, 
                       )
 
@@ -31,7 +34,7 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_o
         cv2.rectangle(img=image,
                       pt1=(bbox[0], bbox[1]),
                       pt2=(bbox[2], bbox[3]),
-                      color=(0, 0, 0), # 青に近い色
+                      color=colormap_dict['actual'], # 青に近い色
                       thickness=3,
                       )
 
