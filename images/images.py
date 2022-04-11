@@ -27,7 +27,7 @@ def visualize_image_and_bboxes(images: List[torch.Tensor], targets: List[Dict[st
         cv2.rectangle(img=image,
                       pt1=(box[0], box[1]),
                       pt2=(box[2], box[3]),
-                      color=(220, 0, 0),
+                      color=(220, 0, 0),# 赤に近い色
                       thickness=3
                       )
 

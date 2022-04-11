@@ -1,3 +1,4 @@
+from tkinter.messagebox import NO
 from typing import Dict, List
 from torch.utils.data import DataLoader
 import torch
@@ -26,33 +27,37 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_o
     png_name : str
         _description_
     """
+
+
     # bboxの色の指定
     colormap_dict = {'predicted': (220, 0, 0), 'actual': (0, 220, 0)}
 
     # Figureオブジェクト、Axesオブジェクトの生成
     fig, ax = plt.subplots(1, 1, figsize=(16, 8))
 
-    # 画像にbboxを1つずつ描画
-    for bbox in bboxes_predicted:
-        cv2.rectangle(img=image,
-                      pt1=(bbox[0], bbox[1]),
-                      pt2=(bbox[2], bbox[3]),
-                      color=(220, 0, 0),  # 赤に近い色
-                      thickness=3,
-                      )
+    if bboxes_predicted is not None:
+        # 画像にbboxを1つずつ描画
+        for bbox in bboxes_predicted:
+            cv2.rectangle(img=image,
+                        pt1=(bbox[0], bbox[1]),
+                        pt2=(bbox[2], bbox[3]),
+                        color=(0, 220, 0),  # 緑に近い色
+                        thickness=3,
+                        )
 
+    # 実測値のbboxも描画
     for bbox in bboxes_observed:
         cv2.rectangle(img=image,
                       pt1=(bbox[0], bbox[1]),
                       pt2=(bbox[2], bbox[3]),
-                      color=(0, 220, 0),  # 青に近い色
+                      color=(0, 0, 220),  # 赤に近い色
                       thickness=3,
                       )
 
     ax.set_axis_off()
     ax.imshow(image)
     INPUT_DIR = 'input'
-    plt.savefig(os.path.join(INPUT_DIR, f'{png_name}.png'),
+    fig.savefig(os.path.join(INPUT_DIR, f'{png_name}.png'),
                 tight_layout=True,
                 dpi=64,
                 facecolor="lightgray",)
@@ -109,8 +114,16 @@ def show_images_bbox_predicted(test_dataloader: DataLoader, model: FasterRCNN, i
     outputs_scores = outputs_scores[outputs_scores >= detection_threshold]
 
     # 描画＋png出力
-    file_name = f'image_bboxes_predict_{image_i}'
+    file_name = f'image_bboxes_predict_and_actual_{image_i}'
     _draw_bboxes_on_image(image=sample_image,
                           bboxes_predicted=outputs_bboxes,
                           bboxes_observed=boxes,
                           png_name=file_name)
+    # 実測値だけの画像も描画
+    file_name = f'image_bboxes_onlyactual_{image_i}'
+    _draw_bboxes_on_image(image=sample_image,
+                        bboxes_predicted=None,
+                        bboxes_observed=boxes,
+                        png_name=file_name)
+
+    

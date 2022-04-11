@@ -91,6 +91,7 @@ def main():
     show_images_bbox_predicted(test_dataloader=valid_dataloader,
                                model=model,
                                image_i=0)
+    # 予測値なしのbbox画像も出力しておく.
 
     # 推論
     results = predict_object_detection(test_dataloader=test_dataloader,
