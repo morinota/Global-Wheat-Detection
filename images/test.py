@@ -26,7 +26,7 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_o
         _description_
     """
     # bboxの色の指定
-    colormap_dict = {'predicted':(220, 0, 40), 'actual':(91, 220, 0)}
+    colormap_dict = {'predicted':(220, 0, 0), 'actual':(0, 220, 0)}
 
     # Figureオブジェクト、Axesオブジェクトの生成
     fig, ax = plt.subplots(1, 1, figsize=(16, 8))
