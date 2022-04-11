@@ -12,7 +12,7 @@ INPUT_DIR = 'input'
 
 def visualize_image_and_bboxes(images: List[torch.Tensor], targets: List[Dict[str, torch.Tensor]], i: int) -> None:
     '''
-    DataLoaderから取得してきた1バッチ分のデータセットに対し、指定されたindexの画像データとbboxを可視化する関数
+    DataLoaderから取得してきた1バッチ分のデータセットに対し、指定されたindexの画像データとbbox(実測値)を可視化する関数
     '''
     # 1バッチ分のデータの中から、指定されたindexの情報を抽出
     boxes = targets[i]['boxes'].cpu().numpy().astype(np.int32)

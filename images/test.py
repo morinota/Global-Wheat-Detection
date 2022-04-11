@@ -46,7 +46,7 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_o
 
 def show_images_bbox_predicted(test_dataloader: DataLoader, model: FasterRCNN, image_i: int = 0):
     '''
-    推論結果を取得して、画像+bbox(推論結果)としてpng出力する関数
+    推論結果を取得して、画像+bbox(推論結果と実測値の両方)としてpng出力する関数
     '''
 
     # GPUのキャッシュクリア
@@ -74,16 +74,27 @@ def show_images_bbox_predicted(test_dataloader: DataLoader, model: FasterRCNN, i
     cpu_device = torch.device("cpu")
 
     # modelに画像のTensorを渡せば推論を実行する(返値もTensor)
-    outputs = model(images)  # ->(dataloaderの返値と同じ形?)
+    outputs: List[Dict[str, Tensor]] = model(images)  # ->(dataloaderの返値と同じ形?)
+
+    # detection閾値の設定
+    detection_threshold = 0.7
+
     # Tensorをデバイスに渡す
     outputs = [{k: v.to(cpu_device) for k, v in t.items()} for t in outputs]
     # 指定の画像のbboxesの推定値を取得+ndarrayに格納
     outputs_bboxes = outputs[image_i]['boxes'].cpu(
-    ).detach().numpy().astype(np.int32)
+    ).detach().numpy()
+    # 各bboxのスコア(物体である確率?)を取得 + ndarrayに格納
+    outputs_scores = outputs[image_i]['scores'].data.cpu().numpy()
 
+    # スコアが閾値より高いbboxのみを残す。
+    outputs_bboxes = outputs_bboxes[outputs_scores >= detection_threshold].astype(np.int32)
+    # スコアも、選択したbboxと同じ長さにしておく
+    outputs_scores = outputs_scores[outputs_scores >= detection_threshold]
+    
     # 描画＋png出力
     file_name = f'image_bboxes_predict_{image_i}'
     _draw_bboxes_on_image(image=sample_image,
-                          bboxes_predicted = outputs_bboxes,
+                          bboxes_predicted=outputs_bboxes,
                           bboxes_observed=boxes,
                           png_name=file_name)
