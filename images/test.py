@@ -13,7 +13,7 @@ import os
 DRIVE_DIR = r'/content/drive/MyDrive/Colab Notebooks/kaggle/Global-Wheat-Detection'
 
 
-def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_observed: ndarray, png_name: str):
+def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_observed: ndarray, png_name: str, predict_show=True):
     """画像pixel(ndarray)と、bboxの座標群を渡して、それらをpngとして描画出力する関数
 
     Parameters
@@ -35,7 +35,7 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_o
     # Figureオブジェクト、Axesオブジェクトの生成
     fig, ax = plt.subplots(1, 1, figsize=(16, 8))
 
-    if bboxes_predicted is not None:
+    if predict_show:
         # 画像にbboxを1つずつ描画
         for bbox in bboxes_predicted:
             cv2.rectangle(img=image,
@@ -123,8 +123,9 @@ def show_images_bbox_predicted(test_dataloader: DataLoader, model: FasterRCNN, i
     # 実測値だけの画像も描画
     file_name = f'image_bboxes_onlyactual_{image_i}'
     _draw_bboxes_on_image(image=sample_image,
-                        bboxes_predicted=None,
+                        bboxes_predicted=outputs_bboxes,
                         bboxes_observed=boxes,
+                        predict_show=False,
                         png_name=file_name)
 
     
