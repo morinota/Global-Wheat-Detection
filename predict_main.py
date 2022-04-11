@@ -87,7 +87,7 @@ def main():
     model_path = os.path.join(DRIVE_DIR, 'model.pth')
     model.load_state_dict(torch.load(model_path))
 
-    # 予測値bboxの画像出力
+    # 検証用データに対して、予測値bboxの画像出力
     show_images_bbox_predicted(test_dataloader=valid_dataloader,
                                model=model,
                                image_i=0)

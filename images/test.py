@@ -12,9 +12,19 @@ import os
 
 
 def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_observed: ndarray, png_name: str):
-    '''
-    画像pixel(ndarray)と、bboxの座標群を渡して、それらをpngとして描画出力する関数
-    '''
+    """画像pixel(ndarray)と、bboxの座標群を渡して、それらをpngとして描画出力する関数
+
+    Parameters
+    ----------
+    image : np.ndarray
+        _description_
+    bboxes_predicted : ndarray
+        _description_
+    bboxes_observed : ndarray
+        _description_
+    png_name : str
+        _description_
+    """
     # bboxの色の指定
     colormap_dict = {'predicted':(255, 0, 40), 'actual':(91, 255, 0)}
 
@@ -45,6 +55,7 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_o
                 tight_layout=True,
                 dpi=64,
                 facecolor="lightgray",)
+    print(f'save the figure to {os.path.join(INPUT_DIR, f'{png_name}.png')}')
 
 
 def show_images_bbox_predicted(test_dataloader: DataLoader, model: FasterRCNN, image_i: int = 0):
@@ -101,3 +112,4 @@ def show_images_bbox_predicted(test_dataloader: DataLoader, model: FasterRCNN, i
                           bboxes_predicted=outputs_bboxes,
                           bboxes_observed=boxes,
                           png_name=file_name)
+    
