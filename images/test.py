@@ -46,13 +46,14 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_o
                         )
 
     # 実測値のbboxも描画
-    for bbox in bboxes_observed:
-        cv2.rectangle(img=image,
-                      pt1=(bbox[0], bbox[1]),
-                      pt2=(bbox[2], bbox[3]),
-                      color=(0, 0, 220),  # 赤に近い色
-                      thickness=3,
-                      )
+    if bboxes_observed is not None:
+        for bbox in bboxes_observed:
+            cv2.rectangle(img=image,
+                        pt1=(bbox[0], bbox[1]),
+                        pt2=(bbox[2], bbox[3]),
+                        color=(220, 0, 0),  # 赤に近い色
+                        thickness=3,
+                        )
 
     ax.set_axis_off()
     ax.imshow(image)
