@@ -116,13 +116,6 @@ def show_images_bbox_predicted(test_dataloader: DataLoader, model: FasterRCNN, i
     # スコアも、選択したbboxと同じ長さにしておく
     outputs_scores = outputs_scores[outputs_scores >= detection_threshold]
 
-    # 描画＋png出力
-    file_name = f'image_bboxes_predict_and_actual_{image_i}'
-    _draw_bboxes_on_image(image=sample_image,
-                          bboxes_predicted=outputs_bboxes,
-                          bboxes_observed=boxes,
-                          predict_show=True,
-                          png_name=file_name)
     # 実測値だけの画像も描画
     file_name = f'image_bboxes_onlyactual_{image_i}'
     _draw_bboxes_on_image(image=sample_image,
@@ -130,5 +123,12 @@ def show_images_bbox_predicted(test_dataloader: DataLoader, model: FasterRCNN, i
                         bboxes_observed=boxes,
                         predict_show=False,
                         png_name=file_name)
+    # 描画＋png出力
+    file_name = f'image_bboxes_predict_and_actual_{image_i}'
+    _draw_bboxes_on_image(image=sample_image,
+                          bboxes_predicted=outputs_bboxes,
+                          bboxes_observed=boxes,
+                          predict_show=True,
+                          png_name=file_name)
 
     
