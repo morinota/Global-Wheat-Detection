@@ -8,6 +8,7 @@ import os
 
 from torch import Tensor
 INPUT_DIR = 'input'
+DRIVE_DIR = r'/content/drive/MyDrive/Colab Notebooks/kaggle/Global-Wheat-Detection'
 
 
 def visualize_image_and_bboxes(images: List[torch.Tensor], targets: List[Dict[str, torch.Tensor]], i: int) -> None:

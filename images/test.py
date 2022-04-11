@@ -9,6 +9,7 @@ from torchvision.models.detection.faster_rcnn import FasterRCNN
 import matplotlib.pyplot as plt
 import cv2
 import os
+DRIVE_DIR = r'/content/drive/MyDrive/Colab Notebooks/kaggle/Global-Wheat-Detection'
 
 
 def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_observed: ndarray, png_name: str):
@@ -26,7 +27,7 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_o
         _description_
     """
     # bboxの色の指定
-    colormap_dict = {'predicted':(220, 0, 0), 'actual':(0, 220, 0)}
+    colormap_dict = {'predicted': (220, 0, 0), 'actual': (0, 220, 0)}
 
     # Figureオブジェクト、Axesオブジェクトの生成
     fig, ax = plt.subplots(1, 1, figsize=(16, 8))
@@ -36,15 +37,15 @@ def _draw_bboxes_on_image(image: np.ndarray, bboxes_predicted: ndarray, bboxes_o
         cv2.rectangle(img=image,
                       pt1=(bbox[0], bbox[1]),
                       pt2=(bbox[2], bbox[3]),
-                      color=colormap_dict['predicted'], # 赤に近い色
-                      thickness=3, 
+                      color=(220, 0, 0),  # 赤に近い色
+                      thickness=3,
                       )
 
     for bbox in bboxes_observed:
         cv2.rectangle(img=image,
                       pt1=(bbox[0], bbox[1]),
                       pt2=(bbox[2], bbox[3]),
-                      color=colormap_dict['actual'], # 青に近い色
+                      color=(0, 220, 0),  # 青に近い色
                       thickness=3,
                       )
 
@@ -102,14 +103,14 @@ def show_images_bbox_predicted(test_dataloader: DataLoader, model: FasterRCNN, i
     outputs_scores = outputs[image_i]['scores'].data.cpu().numpy()
 
     # スコアが閾値より高いbboxのみを残す。
-    outputs_bboxes = outputs_bboxes[outputs_scores >= detection_threshold].astype(np.int32)
+    outputs_bboxes = outputs_bboxes[outputs_scores >=
+                                    detection_threshold].astype(np.int32)
     # スコアも、選択したbboxと同じ長さにしておく
     outputs_scores = outputs_scores[outputs_scores >= detection_threshold]
-    
+
     # 描画＋png出力
     file_name = f'image_bboxes_predict_{image_i}'
     _draw_bboxes_on_image(image=sample_image,
                           bboxes_predicted=outputs_bboxes,
                           bboxes_observed=boxes,
                           png_name=file_name)
-    
